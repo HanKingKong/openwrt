@@ -2,8 +2,8 @@ This is the buildsystem for the OpenWrt Linux distribution.
 
 You need to have installed the following tools
 ```
-$ sudo apt-get install gcc binutils bzip2 flex python perl 
-$ sudo apt-get isntall make findutils grep diffutils unzip gawk subversion zlib1g-dev build-essential
+$ sudo apt-get install gcc binutils bzip2 flex python perl libncurses5-dev libssl-dev openssl
+$ sudo apt-get install make findutils grep diffutils unzip gawk subversion zlib1g-dev build-essential
 ```
 Run to get all the latest package definitions defined in feeds.conf / feeds.conf.default respectively, and install symlinks of all of them into
 package/feeds/.
