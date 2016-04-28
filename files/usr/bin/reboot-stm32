@@ -1,0 +1,13 @@
+#!/bin/sh
+## Author: Robin @ IntoRobot Team
+## Modification Date: 10 Apr. 2016
+## Brief: Reboot stm32
+
+. /home/intorobot/intorobot_log_tool/intorobot_log_tool.sh
+print_inf "[$0 info]:cmd=$0 $*"
+
+source /usr/bin/set_io_num
+
+echo 0 > /sys/class/gpio/gpio${pin_reset}/value   #reset the stm32
+usleep 10000
+echo 1 > /sys/class/gpio/gpio${pin_reset}/value

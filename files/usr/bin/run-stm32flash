@@ -1,0 +1,86 @@
+#!/bin/sh
+## Author: Robin @ IntoRobot Team
+## Modification Date: 10 Apr. 2016
+## Brief: run stm32flash
+
+. /home/intorobot/intorobot_log_tool/intorobot_log_tool.sh
+print_inf "[run-stm32flash info]:cmd=$0 $*"
+
+if [ $# != 2 ];then
+echo "------------------------------------------------------------"
+echo "usage:   $0 filename address"
+echo "example: $0 core-firmware.bin 0x8000000"
+echo "------------------------------------------------------------"
+print_err "[run-stm32flash err ]:argc=2"
+exit 1
+fi
+
+source /usr/bin/set_io_num
+
+let "file_max_size=123*1024" #123k
+size=`ls -l $1 | awk '{print $5}'`
+print_inf "[run-stm32flash info]:file size=$size Bytes"
+if [ $size -le $file_max_size ];then
+if [ $(($size&0x3)) != 0 ]; then
+print_err "[run-stm32flash err ]:File $1 length must be 4 byte aligned"
+echo "ERROR: File $1 length must be 4 byte aligned"
+exit 1
+fi
+else
+print_err "[run-stm32flash err ]:File size too big; $size Byte > $file_max_size Byte "
+echo "ERROR: File size too big; $size Byte > $file_max_size Byte"
+exit 1
+fi
+
+rgb_control blink 255 255 0 100 //blink yellow
+
+echo 1 > /sys/class/gpio/gpio${pin_boot0}/value   #pull up the boot0 to high 
+usleep 10000
+
+kill -STOP `ps w|grep /bin/ash|grep -v grep|awk '{print $1}'`   #stop the serial console
+kill -KILL `ps w|grep python|grep -v grep|awk '{print $1}'`     #kill the python
+kill -KILL `ps w|grep /usr/bin/mjpg_streamer|grep -v grep|awk '{print $1}'` #mjpg_streamer
+
+count=0
+result=1
+while [ $count -lt 8 ]
+do
+echo 0 > /sys/class/gpio/gpio${pin_reset}/value   #reset the stm32
+usleep 10000
+echo 1 > /sys/class/gpio/gpio${pin_reset}/value
+
+if [ $count -gt 4 ]
+then
+/usr/bin/stm32flash -b 115200 -v -w $1 -S $2:$size  /dev/ttyS0
+else
+/usr/bin/stm32flash -b 1000000 -v -w $1 -S $2:$size  /dev/ttyS0
+fi
+
+if [ $? == 0 ]
+then 
+result=0
+print_inf "[run-stm32flash info]:burn OK count=$count"
+break
+fi
+let "count = count +1"
+done
+
+if [ $result != 0 ]
+then
+print_err "[run-stm32flash err ]:burn err count=8"
+fi
+
+
+
+kill -CONT `ps w|grep /bin/ash|grep -v grep|awk '{print $1}'`   #continue the serial console
+#/etc/init.d/mjpg-streamer start
+
+echo 0 > /sys/class/gpio/gpio${pin_boot0}/value                           #pull down the boot0 to low
+usleep 10000
+echo 0 > /sys/class/gpio/gpio${pin_reset}/value                           #reset the stm32
+usleep 10000
+echo 1 > /sys/class/gpio/gpio${pin_reset}/value
+
+set_led_kill                                                   #close led
+
+exit $result

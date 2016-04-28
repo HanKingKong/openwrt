@@ -1,5 +1,7 @@
 #!/bin/ash
-#Kill all the running RBG led scripts
+## Author: CHY @ IntoRobot Team
+## Modification Date: 10 Dec. 2015
+## Brief: Kill all running RGB-led scripts
 
 kill -9 `ps w|grep set_led_blink|grep -v grep|awk '{print $1}'`    #stop the led blink 
 kill -9 `ps w|grep set_led_breath|grep -v grep|awk '{print $1}'`   #stop the led breath
