@@ -1,5 +1,5 @@
 #!/bin/sh
-## Author: HY Chen
+## Author: CHY @ IntoRobot Team
 ## Modification Date: 10 Dec. 2015
 ## Brief: set the leb blink
 #  Red:   gpio#17
@@ -8,31 +8,65 @@
 
 source set_led_color $1 $2 $3
 
-trap "                                          
-echo 0 > /sys/class/gpio/gpio${red}/value  
-echo 0 > /sys/class/gpio/gpio${green}/value
-echo 0 > /sys/class/gpio/gpio${blue}/value
-exit" INT
+enpwm=`uci get atom.@openwrt[0].pwm`
 
-if [ "$4" = "" ]; then                              
-  let "time=400*1000"   #400ms   unit:us                              
-else                                         
-  let "time=$4*1000"                              
-fi   #blink period
+if [ $enpwm = 0 ]; then
+	trap "                                          
+	echo 0 > /sys/class/gpio/gpio${red}/value  
+	echo 0 > /sys/class/gpio/gpio${green}/value
+	echo 0 > /sys/class/gpio/gpio${blue}/value
+	exit" INT
 
-let "time=time/2"
+	if [ "$4" = "" ]; then                              
+        let "time=400*1000"   #400ms   unit:us                              
+	else                                         
+        let "time=$4*1000"                              
+	fi   #blink period
+
+	let "time=time/2"
                                  
-while :;do   
-  echo $duty_red > /sys/class/gpio/gpio${red}/value
-  echo $duty_green > /sys/class/gpio/gpio${green}/value
-  echo $duty_blue > /sys/class/gpio/gpio${blue}/value
-  usleep $time                             
-  echo 0 > /sys/class/gpio/gpio${red}/value
-  echo 0 > /sys/class/gpio/gpio${green}/value
-  echo 0 > /sys/class/gpio/gpio${blue}/value
-  usleep $time                                            
-done                                                            
+	while :;do   
+		echo $duty_red > /sys/class/gpio/gpio${red}/value
+		echo $duty_green > /sys/class/gpio/gpio${green}/value
+		echo $duty_blue > /sys/class/gpio/gpio${blue}/value
+		usleep $time                             
+		echo 0 > /sys/class/gpio/gpio${red}/value
+		echo 0 > /sys/class/gpio/gpio${green}/value
+		echo 0 > /sys/class/gpio/gpio${blue}/value
+    usleep $time                                            
+	done                                                            
 
-echo 0 > /sys/class/gpio/gpio${red}/value
-echo 0 > /sys/class/gpio/gpio${green}/value
-echo 0 > /sys/class/gpio/gpio${blue}/value
+	echo 0 > /sys/class/gpio/gpio${red}/value
+	echo 0 > /sys/class/gpio/gpio${green}/value
+	echo 0 > /sys/class/gpio/gpio${blue}/value
+
+else
+	trap "                                          
+	echo 0 > /sys/class/pwm/gpio_pwm\:${red}/duty_ns  
+	echo 0 > /sys/class/pwm/gpio_pwm\:${green}/duty_ns
+	echo 0 > /sys/class/pwm/gpio_pwm\:${blue}/duty_ns
+	exit" INT
+
+	if [ "$4" = "" ]; then                              
+        let "time=400*1000"   #400ms   unit:us                              
+	else                                         
+        let "time=$4*1000"                              
+	fi   #blink period
+
+	let "time=time/2"
+                                 
+	while :;do   
+		echo $duty_red > /sys/class/pwm/gpio_pwm\:${red}/duty_ns
+		echo $duty_green > /sys/class/pwm/gpio_pwm\:${green}/duty_ns
+		echo $duty_blue > /sys/class/pwm/gpio_pwm\:${blue}/duty_ns
+		usleep $time                             
+		echo 0 > /sys/class/pwm/gpio_pwm\:${red}/duty_ns
+		echo 0 > /sys/class/pwm/gpio_pwm\:${green}/duty_ns
+		echo 0 > /sys/class/pwm/gpio_pwm\:${blue}/duty_ns
+    usleep $time                                            
+	done                                                            
+
+	echo 0 > /sys/class/pwm/gpio_pwm\:${red}/duty_ns
+	echo 0 > /sys/class/pwm/gpio_pwm\:${green}/duty_ns
+	echo 0 > /sys/class/pwm/gpio_pwm\:${blue}/duty_ns
+fi

@@ -1,4 +1,7 @@
 #!/bin/sh
+## Author: Robin @ IntoRobot Team
+## Modification Date: 10 Apr. 2016
+## Brief: run stm32flash
 
 . /home/intorobot/intorobot_log_tool/intorobot_log_tool.sh
 print_inf "[run-stm32flash info]:cmd=$0 $*"
@@ -67,7 +70,10 @@ then
 print_err "[run-stm32flash err ]:burn err count=8"
 fi
 
+
+
 kill -CONT `ps w|grep /bin/ash|grep -v grep|awk '{print $1}'`   #continue the serial console
+#/etc/init.d/mjpg-streamer start
 
 echo 0 > /sys/class/gpio/gpio${pin_boot0}/value                           #pull down the boot0 to low
 usleep 10000

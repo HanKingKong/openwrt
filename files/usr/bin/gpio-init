@@ -1,6 +1,7 @@
 #!/bin/sh
-#Initialize stm32 boot and reset gpios 
-#If you want to change the output value of the gpio, just echo different value to /sys/class/gpio/gpioN/value
+## Author: Robin @ IntoRobot Team
+## Modification Date: 10 Apr. 2016
+## Brief: Initialize stm32 boot and reset gpios. If you want to change the output value of the gpio, just echo different values to /sys/class/gpio/gpioN/value
 
 source /usr/bin/set_io_num
 

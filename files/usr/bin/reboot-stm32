@@ -1,4 +1,7 @@
 #!/bin/sh
+## Author: Robin @ IntoRobot Team
+## Modification Date: 10 Apr. 2016
+## Brief: Reboot stm32
 
 . /home/intorobot/intorobot_log_tool/intorobot_log_tool.sh
 print_inf "[$0 info]:cmd=$0 $*"

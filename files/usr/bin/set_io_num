@@ -1,5 +1,7 @@
-#Set the gpio pin number for the RGB led indicator
-#Set the gpio pin number for the STM32 boot and reset
+#!/bin/sh
+## Author: Robin @ IntoRobot Team
+## Modification Date: 10 Apr. 2016
+## Brief: Set the gpio pins for RGB led indicator, and STM32 boot and reset
 
 red=17    #
 green=21  #
