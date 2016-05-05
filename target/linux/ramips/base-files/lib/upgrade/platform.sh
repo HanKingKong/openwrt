@@ -34,6 +34,7 @@ platform_check_image() {
 	broadway|\
 	carambola|\
 	cf-wr800n|\
+	cs-qr10|\
 	d105|\
 	dap-1350|\
 	db-wrt01|\
@@ -78,7 +79,10 @@ platform_check_image() {
 	mpr-a1|\
 	mpr-a2|\
 	mr-102n|\
+	mt7628|\
+	mzk-750dhp|\
 	mzk-dp150n|\
+	mzk-ex300np|\
 	mzk-w300nh2|\
 	nbg-419n|\
 	nw718|\
@@ -124,8 +128,10 @@ platform_check_image() {
 	wli-tx4-ag300n|\
 	wmr-300|\
 	wnce2001|\
+	wndr3700v5|\
 	wr512-3gn|\
 	wr6202|\
+	wrh-300cr|\
 	wrtnode|\
 	atom|\
 	wrtnode2r |\
@@ -140,6 +146,7 @@ platform_check_image() {
 	y1s|\
 	zbt-wa05|\
 	zbt-wg2626|\
+	zbt-wg3526|\
 	zbt-wr8305rt|\
 	zte-q7|\
 	youku-yk1)
