@@ -119,3 +119,35 @@ Sunshine!
             option encryption psk2
             option key intorobot 
 ```
+### 10. Add driver for usb and Sound Driver (Optional)
+Sound --->
+      ---> madplay
+      ---->madplay-alsa
+Kernel modules --->
+      --->USB Support
+          --->kmod-usb-core
+          --->kmod-usb-ohci
+          --->kmod-usb-storage
+          --->kmod-usb-uhci
+          --->kmod-usb2
+
+      --->Sound Support
+          ---> kmod-usb-audio
+Refer to： http://blog.sina.com.cn/s/blog_3c0a593901010iqx.html
+
+
+### 11. Add fswebcam (Optional)
+Multimedia --->
+                --->fswebcam
+
+driver for /dev/video0
+Kernel modules --->
+                --->kmod-video-core
+                       --->kmod-video-uvc
+                       --->kmod-video-videobuf2
+
+### 12. Add email msmtp (Optional)
+msmtp mutt(fujian)
+Mail --->
+            --->msmtp
+            --->mutt
